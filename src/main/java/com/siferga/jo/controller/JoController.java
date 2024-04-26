@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Map;
@@ -17,13 +18,15 @@ public class JoController {
     public JoController(JoService joService) {
         this.joService = joService;
     }
-    @GetMapping("/callProcedure")
-    public List<Map<String, Object>> callSp(@RequestParam int year) {
-        return joService.callSpJoPaysRankedForYear(year);
-    }
+
     @GetMapping("/chart")
     public List<Map<String, Object>> getChartData(@RequestParam int year) {
-        return joService.callSpJoPaysRankedForYear(year);
+        return joService.paysRankedForYear(year);
+    }
+    @GetMapping("/callProcedure")
+    public ModelAndView callSp(@RequestParam int year) {
+        String jsonData = joService.convertListMapToJson(joService.paysRankedForYear(year));
+        return new ModelAndView("chart", "jsonData", jsonData);
     }
 
 }

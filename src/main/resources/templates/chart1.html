@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>ChartJS with SQL Data</title>
+</head>
+<body>
+
+<div>
+    <h1>Medals by Country</h1>
+    <canvas id="myChart1"></canvas>
+</div>
+
+<script>
+    // Function to recup data from the server
+    function fetchData() {
+        return fetch('data.') // Replace 'data.php' with your server-side script URL
+            .then(response => response.json())
+            .then(data => data);
+    }
+
+    // Function to create chart
+    async function createChart() {
+        const data = await fetchData();
+
+        new Chart('myChart1', {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Medal Count',
+                    data: data.medals,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Call the function to create the chart
+    createChart();
+</script>
+
+</body>
+</html>
